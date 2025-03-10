@@ -7,7 +7,6 @@ const getAll = () => axios.get(url).then(response => response.data)
 const create = content => axios
     .post(url, { content, votes: 0 })
     .then(response => response.data)
-    .catch(error => console.error(error.response.data.error))
 
 const vote = anecdote => axios
     .put(`${url}/${anecdote.id}`, { ...anecdote, votes: anecdote.votes + 1 })

@@ -9,4 +9,8 @@ const create = content => axios
     .then(response => response.data)
     .catch(error => console.error(error.response.data.error))
 
-export default { getAll, create }
+const vote = anecdote => axios
+    .put(`${url}/${anecdote.id}`, { ...anecdote, votes: anecdote.votes + 1 })
+    .then(response => response.data)
+
+export default { getAll, create, vote }

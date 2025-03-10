@@ -1,15 +1,27 @@
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import anecdoteServices from './requests'
 
 const App = () => {
+  const queryClient = useQueryClient()
+
   const result = new useQuery({
     queryKey: ['anecdotes'],
     queryFn: anecdoteServices.getAll,
     refetchOnWindowFocus: false,
     retry: 1
   })
+
+  const voteAnecdoteMutation = useMutation({ 
+    mutationFn: anecdoteServices.vote,
+    onSuccess: anecdote => {
+      const anecdotes = queryClient.getQueryData(['anecdotes'])
+      queryClient.setQueryData(['anecdotes'], anecdotes.map(current => 
+        current.id === anecdote.id ? anecdote : current
+      ))
+    }
+   })
 
   console.log(JSON.parse(JSON.stringify(result)))
 
@@ -18,10 +30,6 @@ const App = () => {
   if (result.isError) return <div>Anecdote service not available due to problems in server</div>
 
   const anecdotes = result.data
-
-  const handleVote = (anecdote) => {
-    console.log('vote')
-  }
 
   return (
     <div>
@@ -37,7 +45,7 @@ const App = () => {
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote)}>vote</button>
+            <button onClick={() => voteAnecdoteMutation.mutate(anecdote)}>vote</button>
           </div>
         </div>
       )}

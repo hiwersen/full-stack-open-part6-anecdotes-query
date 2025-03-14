@@ -1,6 +1,5 @@
-import { useContext } from 'react'
-import NotificationContext from '../NotificationContext'
-
+import { useContext } from "react"
+import NotificationContext from "../components/NotificationContext"
 
 export const useNotificationValue = () => {
     return useContext(NotificationContext)[0]
@@ -11,15 +10,14 @@ export const useNotificationDispatch = () => {
 }
 
 let timeoutID = null
+export const useCreateNotification = () => {
+    const dispatch = useContext(NotificationContext)[1]
 
-export const createNotification = (dispatch, message) => {
-    clearTimeout(timeoutID)
-    dispatch({ 
-        type: 'SHOW', 
-        payload: message 
-        })
-
-    timeoutID = setTimeout(() => {
-    dispatch({ type: 'REMOVE' })
-    }, 5000)
+    return notification => {
+        clearTimeout(timeoutID)
+        dispatch({ type: 'SHOW', payload: notification })
+        timeoutID = setTimeout(() => {
+            dispatch({ type: 'REMOVE' })
+        }, 5 * 1e3)
+    }
 }

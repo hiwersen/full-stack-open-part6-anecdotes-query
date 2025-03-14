@@ -15,15 +15,15 @@ export const useMutationCreateAnecdote = () => {
     const queryClient = useQueryClient()
     const createNotification = useCreateNotification()
 
-    return useMutation({ 
+    return useMutation({
         mutationFn: anecdoteService.create,
         onSuccess: anecdote => {
-          const anecdotes = queryClient.getQueryData(['anecdotes']).concat(anecdote)
-          queryClient.setQueryData(['anecdotes'], anecdotes)
-          createNotification(`Anecdote '${anecdote.content}' added`)
+            const anecdotes = queryClient.getQueryData(['anecdotes']).concat(anecdote)
+            queryClient.setQueryData(['anecdotes'], anecdotes)
+            createNotification(`Anecdote '${anecdote.content}' added`)
         },
         onError: error => {
-          createNotification(error.response.data.error)
+            createNotification(error.response.data.error)
         }
     })
 }
@@ -32,14 +32,14 @@ export const useMutationVoteAnecdote = () => {
     const queryClient = useQueryClient()
     const createNotification = useCreateNotification()
 
-    return useMutation({ 
+    return useMutation({
         mutationFn: anecdoteService.vote,
         onSuccess: anecdote => {
-        const anecdotes = queryClient.getQueryData(['anecdotes'])
-            .map(current => current.id === anecdote.id ? anecdote : current)
+            const anecdotes = queryClient.getQueryData(['anecdotes'])
+                .map(current => current.id === anecdote.id ? anecdote : current)
 
-        queryClient.setQueryData(['anecdotes'], anecdotes)
-        createNotification(`Anecdote '${anecdote.content}' voted`)
+            queryClient.setQueryData(['anecdotes'], anecdotes)
+            createNotification(`Anecdote '${anecdote.content}' voted`)
         }
     })
 }

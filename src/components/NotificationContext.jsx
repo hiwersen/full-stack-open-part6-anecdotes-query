@@ -4,12 +4,12 @@ const NotificationContext = createContext()
 
 const notificationReducer = (state = null, action) => {
     switch (action.type) {
-        case 'SHOW':
-            return action.payload
-        case 'REMOVE':
-            return null
-        default:
-            return state
+    case 'SHOW':
+        return action.payload
+    case 'REMOVE':
+        return null
+    default:
+        return state
     }
 }
 
